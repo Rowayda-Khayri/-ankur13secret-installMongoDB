@@ -4,7 +4,7 @@ echo "Starting Server Setup....."
 echo "Be Sure you are are a super user..."
 
 # To become a super user
-sudo su -i
+sudo su
 
 # to update the packages from repositories
   apt-get update
@@ -41,9 +41,8 @@ service php5-fpm restart
 
 # to install MongoDB
 echo "Installing Mongo DB"
-  pecl install mongo
   echo "extension=mongo.so" >> /etc/php5/fpm/php.ini
-  apt-get install mongodb mongodb-server
+  apt-get install -y mongodb mongodb-server
 
 echo "Checking Mongo DB status..."
  service mongod restart
