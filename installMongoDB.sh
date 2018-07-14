@@ -24,34 +24,54 @@ else   #php isn't installed
     ########################## PHP Installation ###########################
 
     #install PHP
-    # to install php5 and all required components
+
+    # to install php7 and all required components
+
     echo "Updating PHP repository"
     apt-get install python-software-properties build-essential -y > /dev/null
-    add-apt-repository ppa:ondrej/php5 -y > /dev/null
+    LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php -y > /dev/null
     apt-get update > /dev/null
 
     echo "Installing PHP"
-    apt-get install php5-common php5-dev php5-cli php5-fpm -y > /dev/null
+    sudo apt-get install php7.0 -y > /dev/null
 
     # PHP-APC is a free and open PHP opcode cacher for caching and optimizing PHP intermediate code, which helps to optimize the php page processing  
     echo "Installing PHP extensions"
-    apt-get install curl php5-curl php5-gd php5-mcrypt php-apc php-pear php5-dev php5-mongo -y > /dev/null
+
+    apt-get install curl php-pear php7.0-dev php7.0-zip php7.0-curl php7.0-gd php7.0-mysql php7.0-mcrypt php7.0-xml php-apcu php-mongodb php7.0-cli php7.0-common php7.0-fpm -y > /dev/null
+
+        
 
     # setting the value to zero to increase the security by processing th exact path and in more faster way
     echo "Setting Fix Path"
-    sed -i 's/cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php5/fpm/php.ini
-    sed -i 's/listen/listen = /var/run/php5-fpm.sock/g' /etc/php5/fpm/pool.d/www.conf
+    sed -i 's|cgi.fix_pathinfo=1|cgi.fix_pathinfo=0|g' /etc/php/7.0/fpm/php.ini
+    sed -i 's|listen|listen = /var/run/php/php7.0-fpm.sock|g' /etc/php/7.0/fpm/pool.d/www.conf
 
-    # configuring php5-mcrypt
-    ln -s /etc/php5/conf.d/mcrypt.ini /etc/php5/mods-available/mcrypt.ini
+    # configuring php7.0-mcrypt
 
-    # enabling php5 mcrypt
-    php5enmod mcrypt
+    #check web server 
 
-    # to restart the service
-    service php5-fpm restart
+    if [[ $(which apache2) ]]
+    then
+
+        ln -s /etc/php/7.0/apache2/conf.d/mcrypt.ini /etc/php/7.0/mods-available/mcrypt.ini
+        # enabling php7 mcrypt
+        phpenmod mcrypt
+    
+    elif [[ $(which nginx) ]]
+    then
+        ln -s /etc/php/mods-available/mcrypt.ini /etc/php/7.0/fpm/conf.d/mcrypt.ini
+        ln -s /etc/php/mods-available/mcrypt.ini /etc/php/7.0/cli/conf.d/mcrypt.ini
+
+        # enabling php7 mcrypt
+        phpenmod mcrypt
+
+        # to restart the service
+        service php7.0-fpm restart
+    fi
 
     ########################## End PHP Installation ###########################
+  
   
 fi
 
