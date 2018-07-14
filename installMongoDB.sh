@@ -80,20 +80,82 @@ fi
 
 
 # to install MongoDB
-echo "Installing Mongo DB"
-  echo "extension=mongo.so" >> /etc/php5/fpm/php.ini
-  apt-get install -y mongodb mongodb-server
-
-echo "Checking Mongo DB status..."
- service mongod restart
- service mongod status
-
-echo "Restarting Server"
-  service nginx restart
-  service php5-fpm restart
+echo "Installing MongoDB..."
   
+# check PHP version
+
+PHPVersion=$(php -r "echo PHP_VERSION;" | cut -c1-1);
+currentVersion=${PHPVersion};
+
+echo  $currentVersion;
+
+if [ "$currentVersion" -eq "5" ]   # PHP 5
+then
+
+    if [[ $(which nginx) ]]
+    then
+
+        echo "extension=mongo.so" >> /etc/php5/fpm/php.ini
+        apt-get install -y mongodb mongodb-server
+
+        echo "Checking Mongo DB status..."
+        service mongodb restart
+        service mongodb status
+
+        echo "Restarting Server"
+        service nginx restart
+        service php5-fpm restart
+
+    elif [[ $(which apache2) ]]
+    then
+
+        echo "extension=mongo.so" >> /etc/php5/apache2/php.ini
+        apt-get install -y mongodb mongodb-server
+
+        echo "Checking Mongo DB status..."
+        service mongodb restart
+        service mongodb status
+
+        echo "Restarting Server"
+        service apache2 restart
+        
+    fi
+
+
+elif [ "$currentVersion" -eq "7" ]    # PHP 7
+then
+
+    if [[ $(which nginx) ]]
+    then
+
+        echo "extension=mongo.so" >> /etc/php/7.0/fpm/php.ini
+        apt-get install -y mongodb mongodb-server
+
+        echo "Checking Mongo DB status..."
+        service mongodb restart
+        service mongodb status
+
+        echo "Restarting Server"
+        service nginx restart
+        service php7.0-fpm restart
+
+    elif [[ $(which apache2) ]]
+    then
+
+        echo "extension=mongo.so" >> /etc/php/7.0/apache2/php.ini
+        apt-get install -y mongodb mongodb-server
+
+        echo "Checking Mongo DB status..."
+        service mongodb restart
+        service mongodb status
+
+        echo "Restarting Server"
+        service apache2 restart
+        
+    fi
+fi
 
 ########################## End Mongo Installation ###########################
-
-echo "Congratulations... Mongo and PHP is installed on server."
-echo "Thankyou..."
+  
+echo "Congratulations... Mongo and PHP are installed on server."
+echo "Thank you..." 
