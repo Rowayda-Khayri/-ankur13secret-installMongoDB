@@ -4,7 +4,7 @@ echo "Written By Ankur Mishra"
 echo "Starting Server Setup....."
 echo "Be Sure you are a super user..."
 
-# To become a super user
+# to become a super user
 sudo su
 
 # to update the packages from repositories
@@ -19,11 +19,11 @@ if [[ $(which php) ]]  #php is already installed
 then
     echo "PHP is already installed.."
 
-else   #php isn't installed
+else   # php isn't installed
 
     ########################## PHP Installation ###########################
 
-    #install PHP
+    # install PHP
 
     # to install php7 and all required components
 
@@ -49,7 +49,7 @@ else   #php isn't installed
 
     # configuring php7.0-mcrypt
 
-    #check web server 
+    # check web server 
 
     if [[ $(which apache2) ]]
     then
